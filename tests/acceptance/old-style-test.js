@@ -1,4 +1,4 @@
-import { create, visitable } from 'ember-cli-page-object';
+import PageObject, { collection, visitable } from 'test-page-object/tests/page-object';
 import { test } from 'qunit';
 import moduleForAcceptance from 'test-page-object/tests/helpers/module-for-acceptance';
 
@@ -10,14 +10,18 @@ test('visiting / in an old school test', function(assert) {
 
   andThen(function() {
     assert.equal(currentURL(), '/', 'Default route is active');
+    assert.strictEqual(flow.defaultRoute.items().count, 4, 'Correct count of items');
   });
 });
 
 function createPageObject() {
-  return create({
+  return PageObject.create({
 
     defaultRoute: {
       visit: visitable('/'),
+      items: collection({
+        itemScope: '.list li',
+      }),
     },
   });
 }
